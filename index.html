@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Split a multi-page PDF into named files using a CSV list, with page-by-page name checks. No file upload or account required.">
+  <meta name="theme-color" content="#0b1020">
+  <title>MailMerge Guard — Split, rename & verify PDFs</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/papaparse@5.7.0/papaparse.min.js"></script>
+  <script defer src="vendor/jszip.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body id="top">
+  <header class="topbar">
+    <div class="topbar-inner">
+    <a class="brand" href="#top" aria-label="Back to top">
+      <span class="brand-icon" aria-hidden="true">M<span>✓</span></span><span>MailMerge <b>Guard</b></span>
+    </a>
+    <nav aria-label="Top navigation"><a href="#how">How it works</a><a href="#faq">FAQ</a><a href="security.html">Security</a></nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="headline">
+      <p class="eyebrow"><span class="tiny-dot"></span> FREE BROWSER-BASED PDF TOOL</p>
+      <h1 id="headline">One big PDF.<br><span>Perfectly named files.</span></h1>
+      <p class="lede">Split a mail-merged PDF using your CSV list. Check names on each page before you download — so you can catch mismatches before sharing.</p>
+      <div class="trust"><span>✓ Files processed in your browser</span><span>✓ No account</span><span>✓ Preview before export</span></div>
+    </section>
+
+    <div class="workspace">
+      <section class="panel" aria-label="PDF splitting workspace">
+        <div class="panel-heading"><div><span class="step">01</span><h2>Choose your files</h2></div><p>PDF + CSV list</p></div>
+        <div class="inputs">
+          <label class="dropzone" id="pdfDrop" for="pdfInput"><span class="file-icon" aria-hidden="true">PDF</span><span class="drop-main">Choose a PDF document</span><span class="drop-sub" id="pdfHint">Multi-page PDF · Up to 20 MB</span><input id="pdfInput" type="file" accept=".pdf,application/pdf"></label>
+          <label class="dropzone" id="csvDrop" for="csvInput"><span class="file-icon csv" aria-hidden="true">CSV</span><span class="drop-main">Choose a CSV name list</span><span class="drop-sub" id="csvHint">With a header row · Up to 1 MB</span><input id="csvInput" type="file" accept=".csv,text/csv"></label>
+        </div>
+        <div class="sample-note"><span>Just exploring?</span><button id="demoBtn" type="button" class="text-button">Load included sample files</button><span class="sample-small">or <a href="sample/recipients.csv" download>download sample CSV</a></span></div>
+        <!-- Privacy & security information shown before a visitor selects private files. -->
+        <aside class="privacy-assurance" aria-labelledby="privacy-assurance-title">
+          <div class="privacy-assurance-heading">
+            <span class="privacy-assurance-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </span>
+            <div>
+              <h3 id="privacy-assurance-title">Your files are processed in your browser</h3>
+              <p>MailMerge Guard does not upload your selected PDF or CSV to an application server.</p>
+            </div>
+          </div>
+          <div class="privacy-assurance-facts" aria-label="Privacy facts">
+            <span>✓ No account required</span>
+            <span>✓ No automatic emailing</span>
+            <span>✓ Downloads created on your device</span>
+          </div>
+          <div class="privacy-assurance-links">
+            <a href="security.html">How it works &amp; what to check <span aria-hidden="true">↗</span></a>
+            <a href="script.js" target="_blank" rel="noopener noreferrer">Inspect the app's JavaScript <span aria-hidden="true">↗</span></a>
+          </div>
+          <p class="privacy-assurance-disclaimer">Transparency, not a security certification. Always review documents before sharing.</p>
+        </aside>
+        <div class="line"></div>
+        <div class="panel-heading compact"><div><span class="step">02</span><h2>Set matching rules</h2></div><p>Simple & flexible</p></div>
+        <div class="settings-grid">
+          <div class="field"><label for="filenameColumn">CSV column for filenames</label><select id="filenameColumn" disabled><option>Upload a CSV first</option></select></div>
+          <div class="field"><label for="verifyColumn">CSV column to verify in PDF</label><select id="verifyColumn" disabled><option>Upload a CSV first</option></select></div>
+          <div class="field"><label for="pagesPer">PDF pages per person</label><input id="pagesPer" type="number" min="1" max="20" step="1" value="1"><small>For a one-page certificate, use 1.</small></div>
+          <div class="field"><label for="prefix">Filename prefix <span class="optional">(optional)</span></label><input id="prefix" type="text" maxlength="40" placeholder="e.g. Certificate_" value=""></div>
+        </div>
+        <label class="toggle"><input id="verifyToggle" type="checkbox" checked><span><strong>Check the recipient name in each PDF</strong><small>Reads searchable text from the first page of each recipient's document. Scanned pages may require manual review.</small></span></label>
+        <div class="action-row"><button id="analyzeBtn" type="button" class="button button-primary"><span class="button-icon" aria-hidden="true">⌕</span> Analyze files</button><span id="status" class="status" role="status" aria-live="polite">Select your files to get started.</span></div>
+      </section>
+
+      <section class="panel results-panel" id="resultsPanel" hidden aria-live="polite">
+        <div class="panel-heading"><div><span class="step">03</span><h2>Review & export</h2></div><p id="resultCount"></p></div>
+        <div class="summary-grid">
+          <div class="summary-cell"><strong id="totalCount">0</strong><span>Documents</span></div>
+          <div class="summary-cell ok"><strong id="matchedCount">0</strong><span>Names found</span></div>
+          <div class="summary-cell caution"><strong id="reviewCount">0</strong><span>Need review</span></div>
+        </div>
+        <p id="resultsIntro" class="muted results-intro"></p>
+        <div class="table-wrap"><table><thead><tr><th>#</th><th>Filename</th><th>Pages</th><th>Name check</th><th>Preview</th></tr></thead><tbody id="resultRows"></tbody></table></div>
+        <div id="reviewArea" class="review-area" hidden><label class="toggle review-toggle"><input id="reviewConfirm" type="checkbox"><span><strong>I reviewed all warnings and accept the page order.</strong><small>Not-found and unreadable text are not proof that the recipient is wrong or right. Visually check the affected pages.</small></span></label></div>
+        <div class="download-row"><button id="downloadZipBtn" class="button button-primary" disabled type="button">↓ Download ZIP</button><button id="downloadReportBtn" class="button button-outline" type="button">↓ Download check report</button><p>Generated locally. Nothing is emailed automatically.</p></div>
+      </section>
+    </div>
+
+    <section class="explain" id="how" aria-labelledby="howTitle"><div class="section-heading"><span class="eyebrow">THE WORKFLOW</span><h2 id="howTitle">From 100 pages to 100 files.</h2><p>Three steps, no installation required.</p></div><div class="how-grid"><article><span class="how-number">01 / UPLOAD</span><h3>Bring your own files</h3><p>Choose a PDF and CSV containing one row per recipient. Pick the column that should become the filename.</p></article><article><span class="how-number">02 / VERIFY</span><h3>Catch mistakes early</h3><p>Names are checked against selectable PDF text. Unreadable or mismatched documents are flagged for review.</p></article><article><span class="how-number">03 / EXPORT</span><h3>Get a tidy ZIP</h3><p>Download separate, named PDFs plus a CSV report showing which pages were verified.</p></article></div></section>
+
+    <section class="faq" id="faq" aria-labelledby="faqTitle"><div class="section-heading"><span class="eyebrow">GOOD TO KNOW</span><h2 id="faqTitle">Built for a safer handoff.</h2></div><div class="faq-grid"><article><h3>Are my documents uploaded?</h3><p>No. Your chosen PDF and CSV are processed in the browser, and the ZIP is created on your device. The processing libraries are downloaded from a third-party CDN. See <a href="security.html">how file processing works</a> and our <a href="privacy.html">privacy policy</a>.</p></article><article><h3>What if a name is not found?</h3><p>You'll get a warning and can preview the page. OCR is not included: scanned PDFs and some unusual fonts can't be verified automatically.</p></article><article><h3>Does it send PDFs by email?</h3><p>No. MailMerge Guard only creates a ZIP download. Review all files before distributing sensitive documents.</p></article><article><h3>What PDF layouts work?</h3><p>Each person's document must use the same fixed number of consecutive pages. Encrypted or digitally signed PDFs are not supported.</p></article></div></section>
+  </main>
+  <footer><div class="footer-inner"><span class="brand tiny">MailMerge <b>Guard</b></span><span>Free tool • No account required</span><a href="security.html">Security &amp; transparency</a><a href="privacy.html">Privacy &amp; limitations</a></div></footer>
+  <dialog id="previewDialog" aria-labelledby="previewTitle"><div class="dialog-top"><div><strong id="previewTitle">Document preview</strong><p id="previewSubtitle"></p></div><button type="button" id="closePreview" aria-label="Close preview">✕</button></div><div id="canvasBox" class="canvas-box"><canvas id="previewCanvas"></canvas></div><p class="preview-help">Visual preview is for manual checking. Confirm the actual recipient before distributing these files.</p></dialog>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>Privacy &amp; limitations — MailMerge Guard</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="MailMerge Guard home"><span class="brand-icon" aria-hidden="true">M<span>✓</span></span><span>MailMerge <b>Guard</b></span></a>
+    <nav aria-label="Top navigation"><a href="index.html">Back to tool</a><a href="security.html">Security</a></nav>
+    </div>
+  </header>
+  <main class="privacy-main">
+    <article class="panel">
+      <h1>Privacy &amp; limitations</h1>
+      <p>Last updated: November 11, 2026</p>
+      <h2>1. File processing</h2>
+      <p>When you select a PDF and CSV from your device, MailMerge Guard reads them in your browser. The application code does not send their contents to a MailMerge Guard server or store them in an application database. Analysis data remains in browser memory while you use the page. Generated PDFs, reports and ZIP files are downloaded to your device when you choose to export them.</p>
+      <h2>2. Website requests and hosting</h2>
+      <p>Your browser downloads the site's HTML, styling and application JavaScript from the website host, and some third-party processing libraries from jsDelivr. Choosing to load the included demo downloads its sample PDF and CSV from the host. The hosting provider may process your IP address, access times and other technical request information under its own policies.</p>
+      <h2>3. Third-party software</h2>
+      <p>The app uses PDF-Lib, Papa Parse, PDF.js and JSZip. In this ready-to-run version, PDF-Lib, Papa Parse and PDF.js are fetched from the jsDelivr CDN; JSZip is included with the website. These requests can expose technical information such as your IP address to that provider, but the app does not intentionally send your selected document contents to it. Library versions and sources are listed in <a href="THIRD_PARTY.md">THIRD_PARTY.md</a>. Serving libraries locally does not guarantee security; browser and hosting environments must also be trusted.</p>
+      <h2>4. Accounts and tracking</h2>
+      <p>No account or payment is required. This version of the application does not include its own advertising or analytics scripts. Website hosting providers may still maintain technical access logs.</p>
+      <h2>5. Name checking and document limitations</h2>
+      <p>Name checking searches text extracted from the first page allocated to each CSV row. It does not establish a person's identity or guarantee that a document belongs to them. Scanned PDFs without selectable text may not be checked. Always inspect the PDF contents and page order before sending documents to anyone.</p>
+      <p>Password-protected, digitally signed and complex PDF forms are not supported. Splitting and saving PDF pages can invalidate signatures or affect form behavior.</p>
+      <h2>6. File and job limits</h2>
+      <p>PDF files are limited to 20 MB and 250 pages; CSV files to 1 MB and 250 recipient rows. Each CSV row must map to the same number of consecutive PDF pages. Large documents may consume significant device memory and time.</p>
+      <h2>7. Your choices and updates</h2>
+      <p>You control which local files to select and whether to download the output. Close or reload the page to discard analysis held in browser memory. The original files remain on your device. This page may be updated when the application's behavior changes.</p>
+      <p><a href="security.html">How browser-side processing works</a> · <a href="index.html">Back to MailMerge Guard</a></p>
+    </article>
+  </main>
+  <footer><div class="footer-inner"><span class="brand tiny">MailMerge <b>Guard</b></span><span>No account required</span><a href="security.html">Security &amp; transparency</a></div></footer>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How MailMerge Guard processes PDF and CSV files in your browser, how to inspect its code, and the limits of its name checks.">
+  <meta name="theme-color" content="#0b1020">
+  <title>Security &amp; transparency — MailMerge Guard</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+    <a class="brand" href="index.html" aria-label="MailMerge Guard home">
+      <span class="brand-icon" aria-hidden="true">M<span>✓</span></span><span>MailMerge <b>Guard</b></span>
+    </a>
+    <nav aria-label="Top navigation">
+      <a href="index.html">Back to tool</a>
+      <a href="privacy.html">Privacy policy</a>
+    </nav>
+    </div>
+  </header>
+  <main class="security-main">
+    <div class="security-intro">
+      <p class="eyebrow">SECURITY &amp; TRANSPARENCY</p>
+      <h1>Understand what happens<br>to your files.</h1>
+      <p class="lede">MailMerge Guard is designed to process your PDF and CSV files in your browser. Here is how it works, how you can inspect it, and what it cannot guarantee.</p>
+    </div>
+    <section class="security-overview" aria-label="File processing steps">
+      <article class="security-step"><span class="security-step-number">01</span><h2>You choose files</h2><p>Your PDF and CSV are read through your browser's file APIs. Files selected from your computer are not uploaded to a MailMerge Guard application server by this code.</p></article>
+      <article class="security-step"><span class="security-step-number">02</span><h2>They are processed locally</h2><p>The app parses the CSV, reads PDF text, checks names and splits pages in your browser. Some processing libraries are downloaded from the jsDelivr CDN. JSZip is provided by the site.</p></article>
+      <article class="security-step"><span class="security-step-number">03</span><h2>You download the result</h2><p>Individual PDFs, a check report and the ZIP are generated in your browser. The app does not automatically email any documents.</p></article>
+    </section>
+    <section class="panel security-detail" aria-labelledby="verify-title">
+      <h2 id="verify-title">Don't rely on a badge. Inspect the implementation.</h2>
+      <p>The application code is directly available from this website. To inspect the HTML, use your browser's “View page source” option on the tool page. You can also examine browser network requests in developer tools when loading files and exporting a ZIP.</p>
+      <div class="source-links">
+        <a href="script.js" target="_blank" rel="noopener noreferrer"><strong>Application JavaScript</strong><span>CSV checks, name matching, PDF splitting and exports ↗</span></a>
+        <a href="style.css" target="_blank" rel="noopener noreferrer"><strong>Stylesheet source</strong><span>Visual styles and layout, available for inspection ↗</span></a>
+        <a href="THIRD_PARTY.md" target="_blank" rel="noopener noreferrer"><strong>Third-party libraries</strong><span>Versions, upstream projects and licenses ↗</span></a>
+      </div>
+      <p class="security-fineprint">These are source-file links, not an independent audit. A public GitHub repository link can be added after the site is published.</p>
+    </section>
+    <section class="panel security-detail" aria-labelledby="communications-title">
+      <h2 id="communications-title">What network requests can still occur?</h2>
+      <p>Your browser requests the website's HTML, CSS, JavaScript and processing libraries, including some fetched from the jsDelivr CDN. If you select <strong>Load included sample files</strong>, it also downloads the sample PDF and CSV from this site.</p>
+      <p>Web hosting providers may receive IP addresses and technical access logs when serving these files. No advertising or analytics scripts are included in this version of the app. The third-party CDN may receive technical request information, but not your selected documents from the application code. Local processing does not eliminate every risk posed by the hosting environment, browser or third-party code.</p>
+    </section>
+    <section class="panel security-detail" aria-labelledby="limits-title">
+      <h2 id="limits-title">Important limits</h2>
+      <ul class="security-limit-list">
+        <li><strong>Not a security certification.</strong> This application has not been independently security-audited. Do not treat it as guaranteed secure for confidential records.</li>
+        <li><strong>Name found does not mean identity verified.</strong> A name can appear elsewhere on a page or be repeated. Manually check each document before distributing it.</li>
+        <li><strong>Scanned PDFs may be unreadable.</strong> No OCR is provided; text extraction can fail even when a name is visible.</li>
+        <li><strong>Some PDF features are unsupported.</strong> Password-protected, digitally signed or complex form PDFs may fail or lose behavior after splitting.</li>
+        <li><strong>Local processing is not a backup.</strong> Reloading or closing the page discards analysis held in browser memory. Keep your original files.</li>
+      </ul>
+      <p>Read the <a href="privacy.html">full privacy policy and limitations</a> before using the tool with sensitive documents.</p>
+    </section>
+    <p class="security-back"><a href="index.html">← Back to MailMerge Guard</a></p>
+  </main>
+  <footer><div class="footer-inner"><span class="brand tiny">MailMerge <b>Guard</b></span><span>Designed for browser-side processing</span><a href="privacy.html">Privacy &amp; limitations</a></div></footer>
+</body>
+</html>
